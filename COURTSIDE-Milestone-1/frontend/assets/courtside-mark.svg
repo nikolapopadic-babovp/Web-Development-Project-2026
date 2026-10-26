@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="COURTSIDE basketball mark">
+  <rect width="64" height="64" rx="18" fill="#f6a623"/>
+  <circle cx="32" cy="32" r="21" fill="none" stroke="#101a2b" stroke-width="3.2"/>
+  <path d="M11 32h42M32 11v42M17 17c10 8 20 22 30 30M47 17C37 25 23 39 17 47" fill="none" stroke="#101a2b" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

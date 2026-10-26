@@ -1,0 +1,15 @@
+erDiagram
+    USERS ||--o{ RUNS : creates
+    USERS ||--o{ RUN_MEMBERS : joins
+    RUNS ||--o{ RUN_MEMBERS : includes
+    USERS ||--o{ SAVED_COURTS : saves
+    COURTS ||--o{ SAVED_COURTS : is_saved_by
+    COURTS ||--o{ RUNS : hosts
+    USERS ||--o{ REVIEWS : writes
+    COURTS ||--o{ REVIEWS : receives
+    USERS { int user_id PK varchar full_name varchar email UK varchar password_hash enum role datetime created_at }
+    COURTS { int court_id PK varchar name varchar address varchar city decimal latitude decimal longitude enum surface_type boolean is_indoor text amenities varchar source varchar external_id datetime created_at }
+    RUNS { int run_id PK int court_id FK int creator_user_id FK varchar title datetime starts_at int max_players enum skill_level text notes enum status datetime created_at }
+    RUN_MEMBERS { int run_member_id PK int run_id FK int user_id FK enum membership_status datetime joined_at }
+    SAVED_COURTS { int saved_court_id PK int user_id FK int court_id FK datetime created_at }
+    REVIEWS { int review_id PK int user_id FK int court_id FK int rating text comment datetime created_at datetime updated_at }

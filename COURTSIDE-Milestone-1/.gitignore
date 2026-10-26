@@ -1,0 +1,23 @@
+# Local secrets / configuration
+backend/config/config.php
+backend/config/.env
+.env
+.env.*
+!.env.example
+
+# Runtime logs (keep directory placeholder only)
+backend/logs/*.log
+backend/logs/*
+!backend/logs/.gitkeep
+
+# Dependencies and generated files
+backend/vendor/
+node_modules/
+.DS_Store
+Thumbs.db
+*.tmp
+*.cache
+
+# Editor / OS
+.vscode/
+.idea/
