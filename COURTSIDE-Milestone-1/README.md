@@ -1,4 +1,4 @@
-# COURTSIDE — Milestone 1
+# COURTSIDE — Milestone 2
 
 COURTSIDE helps basketball players discover courts, save places they like, and organise or join pickup games. This repository contains the Milestone 1 project structure, a responsive static SPA, AI-assistant rules, and a draft database ERD.
 
