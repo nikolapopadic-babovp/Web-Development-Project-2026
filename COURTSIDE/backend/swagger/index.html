@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COURTSIDE — Swagger API docs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+  <style>body{margin:0;background:#fafafa} .topbar{display:none} #loading{font:16px sans-serif;padding:20px}</style>
+</head>
+<body>
+  <div id="loading">Loading Swagger UI… You need an internet connection for Swagger's CDN assets.</div>
+  <div id="swagger-ui"></div>
+  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      if (!window.SwaggerUIBundle) {
+        document.getElementById('loading').textContent = 'Swagger UI could not load from the CDN. Check your internet connection.';
+        return;
+      }
+      document.getElementById('loading').remove();
+      window.SwaggerUIBundle({
+        url: window.location.pathname.replace(/\/docs\/?$/, '/openapi.json'),
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        displayRequestDuration: true,
+        presets: [SwaggerUIBundle.presets.apis]
+      });
+    });
+  </script>
+</body>
+</html>

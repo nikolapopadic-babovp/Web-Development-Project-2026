@@ -1,0 +1,3054 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "COURTSIDE API",
+    "version": "3.0.0",
+    "description": "Milestone 3: Six CRUD entities, business rules, OpenAPI documentation, and MapLark sports halls/arenas discovery (plus legacy court discovery). JWT authentication and role permissions are Milestone 4 tasks; all M3 CRUD endpoints are currently unprotected. The other SPA screens still display demo data. MapLark is attempted first; if unavailable, the backend uses the Overpass OpenStreetMap API. The response provider field reports the actual source."
+  },
+  "servers": [
+    {
+      "url": ".",
+      "description": "Relative to the served /api/openapi.json URL; works in any XAMPP project folder"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Users CRUD operations"
+    },
+    {
+      "name": "Courts",
+      "description": "Courts CRUD operations"
+    },
+    {
+      "name": "Pickup Runs",
+      "description": "Pickup Runs CRUD operations"
+    },
+    {
+      "name": "Run Members",
+      "description": "Run Members CRUD operations"
+    },
+    {
+      "name": "Saved Courts",
+      "description": "Saved Courts CRUD operations"
+    },
+    {
+      "name": "Reviews",
+      "description": "Reviews CRUD operations"
+    },
+    {
+      "name": "External API",
+      "description": "MapLark mapped sports halls/arenas plus legacy basketball pitches"
+    },
+    {
+      "name": "System",
+      "description": "API health and documentation"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "List users",
+        "operationId": "listUsers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create users record",
+        "operationId": "createUsers",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get users record by ID",
+        "operationId": "getUsers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Record found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete users record",
+        "operationId": "deleteUsers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted; data is null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update users record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "putUsers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Partially update users record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "patchUsers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/courts": {
+      "get": {
+        "tags": [
+          "Courts"
+        ],
+        "summary": "List courts",
+        "operationId": "listCourts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "surface_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asphalt",
+                "concrete",
+                "rubber",
+                "wood",
+                "other"
+              ]
+            }
+          },
+          {
+            "name": "is_indoor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourtsListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Courts"
+        ],
+        "summary": "Create courts record",
+        "operationId": "createCourts",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourtsCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourtsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/courts/{id}": {
+      "get": {
+        "tags": [
+          "Courts"
+        ],
+        "summary": "Get courts record by ID",
+        "operationId": "getCourts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Record found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourtsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Courts"
+        ],
+        "summary": "Delete courts record",
+        "operationId": "deleteCourts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted; data is null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Courts"
+        ],
+        "summary": "Update courts record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "putCourts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourtsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourtsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Courts"
+        ],
+        "summary": "Partially update courts record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "patchCourts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourtsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourtsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/runs": {
+      "get": {
+        "tags": [
+          "Pickup Runs"
+        ],
+        "summary": "List pickup runs",
+        "operationId": "listPickupRuns",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PickupRunsListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pickup Runs"
+        ],
+        "summary": "Create pickup runs record",
+        "operationId": "createPickupRuns",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PickupRunsCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PickupRunsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/runs/{id}": {
+      "get": {
+        "tags": [
+          "Pickup Runs"
+        ],
+        "summary": "Get pickup runs record by ID",
+        "operationId": "getPickupRuns",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Record found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PickupRunsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Pickup Runs"
+        ],
+        "summary": "Delete pickup runs record",
+        "operationId": "deletePickupRuns",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted; data is null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Pickup Runs"
+        ],
+        "summary": "Update pickup runs record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "putPickupRuns",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PickupRunsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PickupRunsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Pickup Runs"
+        ],
+        "summary": "Partially update pickup runs record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "patchPickupRuns",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PickupRunsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PickupRunsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/run-members": {
+      "get": {
+        "tags": [
+          "Run Members"
+        ],
+        "summary": "List run members",
+        "operationId": "listRunMembers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunMembersListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Run Members"
+        ],
+        "summary": "Create run members record",
+        "operationId": "createRunMembers",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunMembersCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunMembersEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/run-members/{id}": {
+      "get": {
+        "tags": [
+          "Run Members"
+        ],
+        "summary": "Get run members record by ID",
+        "operationId": "getRunMembers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Record found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunMembersEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Run Members"
+        ],
+        "summary": "Delete run members record",
+        "operationId": "deleteRunMembers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted; data is null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Run Members"
+        ],
+        "summary": "Update run members record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "putRunMembers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunMembersUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunMembersEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Run Members"
+        ],
+        "summary": "Partially update run members record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "patchRunMembers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunMembersUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunMembersEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/saved-courts": {
+      "get": {
+        "tags": [
+          "Saved Courts"
+        ],
+        "summary": "List saved courts",
+        "operationId": "listSavedCourts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedCourtsListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Saved Courts"
+        ],
+        "summary": "Create saved courts record",
+        "operationId": "createSavedCourts",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SavedCourtsCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedCourtsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/saved-courts/{id}": {
+      "get": {
+        "tags": [
+          "Saved Courts"
+        ],
+        "summary": "Get saved courts record by ID",
+        "operationId": "getSavedCourts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Record found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedCourtsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Saved Courts"
+        ],
+        "summary": "Delete saved courts record",
+        "operationId": "deleteSavedCourts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted; data is null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Saved Courts"
+        ],
+        "summary": "Update saved courts record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "putSavedCourts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SavedCourtsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedCourtsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Saved Courts"
+        ],
+        "summary": "Partially update saved courts record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "patchSavedCourts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SavedCourtsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedCourtsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/reviews": {
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "List reviews",
+        "operationId": "listReviews",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewsListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Create reviews record",
+        "operationId": "createReviews",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewsCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/reviews/{id}": {
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Get reviews record by ID",
+        "operationId": "getReviews",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Record found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Delete reviews record",
+        "operationId": "deleteReviews",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted; data is null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Update reviews record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "putReviews",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Partially update reviews record",
+        "description": "Current M3 implementation accepts partial fields for both PUT and PATCH.",
+        "operationId": "patchReviews",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/external/courts": {
+      "get": {
+        "tags": [
+          "External API"
+        ],
+        "summary": "Discover mapped basketball courts from OpenStreetMap (MapLark/Overpass)",
+        "description": "Proxies MapLark OpenStreetMap Features v3; only server reads the API key. Results displayed on Find courts. Locations are approximate for polygon features and not verified on site. If MapLark denies access or is unavailable, the backend automatically tries Overpass; the provider field reports MapLark or Overpass. Neither service guarantees the named facilities or confirms opening hours. Provider policy: MapLark is tried first for category discovery; when unavailable, the backend tries keyless OpenStreetMap Photon and then Overpass. Returns a provider field identifying the actual source. The public demo endpoints offer no uptime guarantee.",
+        "operationId": "discoverExternalCourts",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "example": 43.8563
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "example": 18.4131
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 200,
+              "maximum": 10000,
+              "default": 3000
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Real mapped basketball courts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalCourtEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "502": {
+            "$ref": "#/components/responses/Error502"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          },
+          "504": {
+            "$ref": "#/components/responses/Error504"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "API status",
+        "operationId": "apiStatus",
+        "responses": {
+          "200": {
+            "description": "API is reachable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "milestone": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Download the OpenAPI document",
+        "operationId": "getOpenApi",
+        "responses": {
+          "200": {
+            "description": "OpenAPI JSON",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/docs": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Open Swagger UI",
+        "operationId": "viewSwagger",
+        "responses": {
+          "200": {
+            "description": "Swagger HTML page",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/external/sports-halls": {
+      "get": {
+        "tags": [
+          "External API"
+        ],
+        "summary": "Discover basketball courts and potential indoor basketball halls near a city or neighbourhood",
+        "description": "Only basketball-tagged outdoor pitches and potentially basketball-capable indoor sports halls/centres are returned. Explicitly non-basketball venues and unrelated businesses are excluded. Optional area=Grbavica resolves a neighbourhood, then discovers facilities near it even when the venue has a different name. Use name=Goran Čengić to search for a specific venue by name. An unknown indoor hall is labelled possible; explicit basketball tagging is labelled confirmed as an OSM tag, not verified access. MapLark is tried for city-wide categories, followed by Photon and Overpass; neighbourhood and named search use Photon. Data may be incomplete and does not confirm availability or permission to play.",
+        "operationId": "discoverExternalSportsHalls",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "example": 43.8563
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "example": 18.4131
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 200,
+              "maximum": 10000,
+              "default": 5000
+            },
+            "example": 5000
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "Optional venue name (e.g. Goran Čengić); strictly filtered to sports categories.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "example": "Zetra"
+          },
+          {
+            "name": "area",
+            "in": "query",
+            "required": false,
+            "description": "Optional neighbourhood around the selected city (e.g. Grbavica); venues need not contain the neighbourhood text in their names.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "example": "Grbavica"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mapped basketball courts and potential indoor sports halls; basketball accessibility not verified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalHallEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "502": {
+            "$ref": "#/components/responses/Error502"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          },
+          "504": {
+            "$ref": "#/components/responses/Error504"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          },
+          "404": {
+            "description": "Neighbourhood not found in the selected city",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UsersRecord": {
+        "type": "object",
+        "description": "Database-backed record. Additional DB-managed timestamps may be present.",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 150
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "player",
+              "admin"
+            ]
+          },
+          "user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "created_at": {
+            "type": "string",
+            "description": "UTC MySQL datetime"
+          }
+        }
+      },
+      "UsersCreate": {
+        "type": "object",
+        "required": [
+          "full_name",
+          "email",
+          "password"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 150
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 72,
+            "writeOnly": true
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "player",
+              "admin"
+            ]
+          }
+        }
+      },
+      "UsersUpdate": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 150
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 72,
+            "writeOnly": true
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "player",
+              "admin"
+            ]
+          }
+        },
+        "description": "Partial field updates; both PUT and PATCH currently accept subsets."
+      },
+      "UsersEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/UsersRecord"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "UsersListEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UsersRecord"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "CourtsRecord": {
+        "type": "object",
+        "description": "Database-backed record. Additional DB-managed timestamps may be present.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "address": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 255
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "latitude": {
+            "type": "number",
+            "nullable": true,
+            "minimum": -90,
+            "maximum": 90
+          },
+          "longitude": {
+            "type": "number",
+            "nullable": true,
+            "minimum": -180,
+            "maximum": 180
+          },
+          "surface_type": {
+            "type": "string",
+            "enum": [
+              "asphalt",
+              "concrete",
+              "rubber",
+              "wood",
+              "other"
+            ]
+          },
+          "is_indoor": {
+            "type": "boolean"
+          },
+          "amenities": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 3000
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "sample",
+              "maplark"
+            ]
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 100
+          },
+          "court_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "created_at": {
+            "type": "string",
+            "description": "UTC MySQL datetime"
+          }
+        }
+      },
+      "CourtsCreate": {
+        "type": "object",
+        "required": [
+          "name",
+          "city"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "address": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 255
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "latitude": {
+            "type": "number",
+            "nullable": true,
+            "minimum": -90,
+            "maximum": 90
+          },
+          "longitude": {
+            "type": "number",
+            "nullable": true,
+            "minimum": -180,
+            "maximum": 180
+          },
+          "surface_type": {
+            "type": "string",
+            "enum": [
+              "asphalt",
+              "concrete",
+              "rubber",
+              "wood",
+              "other"
+            ]
+          },
+          "is_indoor": {
+            "type": "boolean"
+          },
+          "amenities": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 3000
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "sample",
+              "maplark"
+            ]
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 100
+          }
+        }
+      },
+      "CourtsUpdate": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "address": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 255
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "latitude": {
+            "type": "number",
+            "nullable": true,
+            "minimum": -90,
+            "maximum": 90
+          },
+          "longitude": {
+            "type": "number",
+            "nullable": true,
+            "minimum": -180,
+            "maximum": 180
+          },
+          "surface_type": {
+            "type": "string",
+            "enum": [
+              "asphalt",
+              "concrete",
+              "rubber",
+              "wood",
+              "other"
+            ]
+          },
+          "is_indoor": {
+            "type": "boolean"
+          },
+          "amenities": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 3000
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "sample",
+              "maplark"
+            ]
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 100
+          }
+        },
+        "description": "Partial field updates; both PUT and PATCH currently accept subsets."
+      },
+      "CourtsEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CourtsRecord"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "CourtsListEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CourtsRecord"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "PickupRunsRecord": {
+        "type": "object",
+        "description": "Database-backed record. Additional DB-managed timestamps may be present.",
+        "properties": {
+          "court_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "creator_user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "starts_at": {
+            "type": "string",
+            "description": "UTC: YYYY-MM-DD HH:MM:SS or ISO-8601 with timezone",
+            "example": "2026-12-01 18:30:00"
+          },
+          "max_players": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 40
+          },
+          "skill_level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "competitive",
+              "all"
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "full",
+              "cancelled",
+              "completed"
+            ]
+          },
+          "run_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "created_at": {
+            "type": "string",
+            "description": "UTC MySQL datetime"
+          }
+        }
+      },
+      "PickupRunsCreate": {
+        "type": "object",
+        "required": [
+          "court_id",
+          "creator_user_id",
+          "title",
+          "starts_at",
+          "max_players"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "court_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "creator_user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "starts_at": {
+            "type": "string",
+            "description": "UTC: YYYY-MM-DD HH:MM:SS or ISO-8601 with timezone",
+            "example": "2026-12-01 18:30:00"
+          },
+          "max_players": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 40
+          },
+          "skill_level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "competitive",
+              "all"
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "full",
+              "cancelled",
+              "completed"
+            ]
+          }
+        }
+      },
+      "PickupRunsUpdate": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "court_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "creator_user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "starts_at": {
+            "type": "string",
+            "description": "UTC: YYYY-MM-DD HH:MM:SS or ISO-8601 with timezone",
+            "example": "2026-12-01 18:30:00"
+          },
+          "max_players": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 40
+          },
+          "skill_level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "competitive",
+              "all"
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "full",
+              "cancelled",
+              "completed"
+            ]
+          }
+        },
+        "description": "Partial field updates; both PUT and PATCH currently accept subsets."
+      },
+      "PickupRunsEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/PickupRunsRecord"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "PickupRunsListEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PickupRunsRecord"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "RunMembersRecord": {
+        "type": "object",
+        "description": "Database-backed record. Additional DB-managed timestamps may be present.",
+        "properties": {
+          "run_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "membership_status": {
+            "type": "string",
+            "enum": [
+              "joined",
+              "waitlisted",
+              "cancelled"
+            ]
+          },
+          "run_member_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "created_at": {
+            "type": "string",
+            "description": "UTC MySQL datetime"
+          },
+          "joined_at": {
+            "type": "string"
+          }
+        }
+      },
+      "RunMembersCreate": {
+        "type": "object",
+        "required": [
+          "run_id",
+          "user_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "run_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "membership_status": {
+            "type": "string",
+            "enum": [
+              "joined",
+              "waitlisted",
+              "cancelled"
+            ]
+          }
+        }
+      },
+      "RunMembersUpdate": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "membership_status": {
+            "type": "string",
+            "enum": [
+              "joined",
+              "waitlisted",
+              "cancelled"
+            ]
+          }
+        },
+        "description": "Partial field updates; both PUT and PATCH currently accept subsets."
+      },
+      "RunMembersEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/RunMembersRecord"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "RunMembersListEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RunMembersRecord"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "SavedCourtsRecord": {
+        "type": "object",
+        "description": "Database-backed record. Additional DB-managed timestamps may be present.",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "court_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "saved_court_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "created_at": {
+            "type": "string",
+            "description": "UTC MySQL datetime"
+          }
+        }
+      },
+      "SavedCourtsCreate": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "court_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "court_id": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "SavedCourtsUpdate": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "court_id": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "description": "Partial field updates; both PUT and PATCH currently accept subsets."
+      },
+      "SavedCourtsEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/SavedCourtsRecord"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "SavedCourtsListEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SavedCourtsRecord"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "ReviewsRecord": {
+        "type": "object",
+        "description": "Database-backed record. Additional DB-managed timestamps may be present.",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "court_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5000
+          },
+          "review_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "created_at": {
+            "type": "string",
+            "description": "UTC MySQL datetime"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      },
+      "ReviewsCreate": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "court_id",
+          "rating"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "court_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5000
+          }
+        }
+      },
+      "ReviewsUpdate": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5000
+          }
+        },
+        "description": "Partial field updates; both PUT and PATCH currently accept subsets."
+      },
+      "ReviewsEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ReviewsRecord"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "ReviewsListEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewsRecord"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message"
+        ]
+      },
+      "ErrorEnvelope": {
+        "type": "object",
+        "required": [
+          "data",
+          "message"
+        ],
+        "properties": {
+          "data": {
+            "nullable": true,
+            "description": "Always null for errors"
+          },
+          "message": {
+            "type": "string",
+            "example": "Resource not found."
+          }
+        }
+      },
+      "ExternalCourt": {
+        "type": "object",
+        "required": [
+          "name",
+          "latitude",
+          "longitude",
+          "source"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "surface": {
+            "type": "string",
+            "nullable": true
+          },
+          "access": {
+            "type": "string",
+            "nullable": true
+          },
+          "osm_url": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "map_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "source": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "sport": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ExternalCourtResult": {
+        "type": "object",
+        "required": [
+          "courts",
+          "count",
+          "provider",
+          "attribution"
+        ],
+        "properties": {
+          "courts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalCourt"
+            }
+          },
+          "count": {
+            "type": "integer"
+          },
+          "provider": {
+            "type": "string",
+            "example": "MapLark",
+            "description": "Actual provider used: MapLark, Photon, or Overpass (subject to availability)."
+          },
+          "attribution": {
+            "type": "string",
+            "example": "© OpenStreetMap contributors"
+          }
+        }
+      },
+      "ExternalCourtEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ExternalCourtResult"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ExternalHall": {
+        "type": "object",
+        "required": [
+          "name",
+          "latitude",
+          "longitude",
+          "source"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "surface": {
+            "type": "string",
+            "nullable": true
+          },
+          "access": {
+            "type": "string",
+            "nullable": true
+          },
+          "osm_url": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "map_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "source": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "nullable": true,
+            "description": "Allowed: sports_hall, sports_centre, basketball-tagged pitch, stadium or arena."
+          },
+          "sport": {
+            "type": "string",
+            "nullable": true,
+            "description": "Sport tag, if supplied by OpenStreetMap."
+          },
+          "basketball_evidence": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "possible"
+            ],
+            "description": "confirmed: OSM basketball/streetball tag; possible: sports hall or centre without explicit basketball verification."
+          }
+        },
+        "description": "Mapped sports facility; location is approximate, especially for polygons, and availability or basketball access is not verified."
+      },
+      "ExternalHallResult": {
+        "type": "object",
+        "required": [
+          "halls",
+          "count",
+          "provider",
+          "attribution"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "provider": {
+            "type": "string",
+            "example": "MapLark",
+            "description": "Actual provider used: MapLark, Photon, or Overpass (subject to availability)."
+          },
+          "attribution": {
+            "type": "string",
+            "example": "© OpenStreetMap contributors"
+          },
+          "halls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalHall"
+            }
+          },
+          "search_area": {
+            "type": "string",
+            "nullable": true,
+            "description": "Neighbourhood around which Photon venue search was centred, if specified."
+          }
+        }
+      },
+      "ExternalHallEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ExternalHallResult"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "Error400": {
+        "description": "Invalid input or JSON request body",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "Error404": {
+        "description": "Resource or route not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "Error409": {
+        "description": "Duplicate or conflicting record",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "Error500": {
+        "description": "Unexpected server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "Error502": {
+        "description": "Upstream response failed or was invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "Error503": {
+        "description": "External API not configured or rate-limited",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "Error504": {
+        "description": "External API timeout/network failure",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "Numeric entity primary key",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 50
+        }
+      },
+      "offset": {
+        "name": "offset",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000,
+          "default": 0
+        }
+      }
+    }
+  }
+}

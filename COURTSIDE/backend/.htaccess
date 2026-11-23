@@ -1,0 +1,8 @@
+Options -Indexes
+RewriteEngine On
+# Keep internal PHP, credentials, runtime files and Composer vendor inaccessible directly.
+RewriteRule ^(config|dao|services|routes|middleware|logs|tests|vendor)(/|$) - [F,L,NC]
+RewriteRule ^(composer\.(json|lock)|\.htaccess)$ - [F,L,NC]
+# All API paths use one FlightPHP front controller.
+RewriteRule ^index\.php$ - [L]
+RewriteRule ^ index.php [QSA,L]
